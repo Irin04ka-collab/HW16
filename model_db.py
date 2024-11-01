@@ -1,4 +1,9 @@
-from main import db
+from flask_sqlalchemy import SQLAlchemy
+db = SQLAlchemy()
+
+"""
+Здесь находятся все определения моделей
+"""
 
 class User(db.Model):
     __tablename__ = "user"
@@ -11,11 +16,25 @@ class User(db.Model):
     phone = db.Column(db.String(40), nullable=False)
     role_id = db.Column(db.Integer)
 
+    def to_dict(self):
+        return {
+            "id": self.id,
+            "first_name": self.first_name,
+            "last_name": self.last_name,
+            "age": self.age,
+            "email": self.email,
+            "role": self.role,
+            "phone": self.phone
+            # "role_id": self.role_id
+        }
+
     # get_order = relationship("Order", foreign_keys=[Order.costumer_id])
     # offers = relationship("Offer")
 
+
 class Offer(db.Model):
     __tablename__ = "offer"
+
     id = db.Column(db.Integer, primary_key=True)
     order_id = db.Column(db.Integer, db.ForeignKey("order.id"))
     executor_id = db.Column(db.Integer, db.ForeignKey("user.id"))
@@ -23,8 +42,10 @@ class Offer(db.Model):
     # order = relationship("Order")
     # give_order = relationship("User")
 
+
 class Order(db.Model):
     __tablename__ = "order"
+
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(100), nullable=False)
     description = db.Column(db.String(255), nullable=False)
@@ -34,6 +55,7 @@ class Order(db.Model):
     price = db.Column(db.Integer)
     customer_id = db.Column(db.Integer, db.ForeignKey("user.id"))
     executor_id = db.Column(db.Integer, db.ForeignKey("user.id"))
+
 
     # user_costumer = relationship("User", foreign_keys=[costumer_id], back_populates='get_order')
     # user_executor = relationship("User", foreign_keys=[executor_id], back_populates='give_order')

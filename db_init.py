@@ -1,59 +1,59 @@
+from model_db import db, User, Order, Offer
+from data import users, orders, offers
 import datetime
-from flask import Flask
-from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy.orm import relationship
 
-from main import app
-from model_db import *
+"""
+В этом файле функции для инициализации базы данных и заполнения её данными
+"""
 
-import utils
+def init_db(app):
+    """
+    инциализация БД
+    """
+    db.init_app(app)
+    with app.app_context():
+        db.drop_all()
+        db.create_all()
+        fill_out_db()
 
 
-# читаем данные из файла
-list_of_users = utils.load_data("data/user.json")
-list_of_orders = utils.load_data("data/orders.json")
-list_of_offers = utils.load_data("data/offers.json")
+def fill_out_db():
+    """
+    заполнение данными таблиц
+    """
 
-
-
-with app.app_context():
-
-    db.drop_all()
-    db.create_all()
-
-    for user in list_of_users:
-
+    for user_data in users:
         db.session.add(User(
-            id=user['id'],
-            first_name=user['first_name'],
-            last_name=user['last_name'],
-            age=user['age'],
-            email=user['email'],
-            role=user['role'],
-            phone=user['phone'],
-            role_id=user['role_id']
+            id=user_data['id'],
+            first_name=user_data['first_name'],
+            last_name=user_data['last_name'],
+            age=user_data['age'],
+            email=user_data['email'],
+            role=user_data['role'],
+            phone=user_data['phone']
+            # так же это эквивалентно записи db.session.add(User(**user_data))
         ))
 
-    for order in list_of_orders:
-        month_start, day_start, year_start = order['start_date'].split("/")
-        month_end, day_end, year_end = order['end_date'].split("/")
+    for order_data in orders:
+        month_start, day_start, year_start = order_data['start_date'].split("/")
+        month_end, day_end, year_end = order_data['end_date'].split("/")
         db.session.add(Order(
-            id=order['id'],
-            name=order['name'],
-            description=order['description'],
+            id=order_data['id'],
+            name=order_data['name'],
+            description=order_data['description'],
             start_date=datetime.date(year=int(year_start), month=int(month_start), day=int(day_start)),
             end_date=datetime.date(year=int(year_end), month=int(month_end), day=int(day_end)),
-            address=order['address'],
-            price=order['price'],
-            customer_id=order['customer_id'],
-            executor_id=order['executor_id']
+            address=order_data['address'],
+            price=order_data['price'],
+            customer_id=order_data['customer_id'],
+            executor_id=order_data['executor_id']
         ))
 
-    for offer in list_of_offers:
+    for offer_data in offers:
         db.session.add(Offer(
-            id=offer['id'],
-            order_id=offer['order_id'],
-            executor_id=offer['executor_id']
+            id=offer_data['id'],
+            order_id=offer_data['order_id'],
+            executor_id=offer_data['executor_id']
         ))
 
     db.session.commit()
