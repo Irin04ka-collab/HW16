@@ -26,7 +26,7 @@ def get_users():
 def get_one_user(uid):
     user = User.query.get(uid)
     if user is None:
-        return jsonify(f"по указанному id={uid} нет данных в базе данных"), 200
+        return jsonify(f"по указанному id={uid} нет данных в базе данных"), 404
 
     return jsonify(user.to_dict()), 200
 
@@ -44,7 +44,7 @@ def get_orders():
 def get_one_order(oid):
     order = Order.query.get(oid)
     if order is None:
-        return jsonify(f"по указанному id={oid} нет данных в базе данных"), 200
+        return jsonify(f"по указанному id={oid} нет данных в базе данных"), 404
 
     return jsonify(order.to_dict()), 200
 
@@ -62,7 +62,7 @@ def get_offers():
 def get_one_offer(ofid):
     offer = Offer.query.get(ofid)
     if offer is None:
-        return jsonify(f"по указанному id={ofid} нет данных в базе данных"), 200
+        return jsonify(f"по указанному id={ofid} нет данных в базе данных"), 404
 
     return jsonify(offer.to_dict()), 200
 
@@ -100,7 +100,7 @@ def add_user():
 def del_user(uid):
     user = User.query.get(uid)
     if user is None:
-        return jsonify(f"по указанному id={uid} нет данных в базе данных"), 200
+        return jsonify(f"по указанному id={uid} нет данных в базе данных"), 404
 
     db.session.delete(user)
     db.session.commit()
@@ -160,7 +160,7 @@ def add_order():
             field_name = error_message.split(":")[-1].strip()
             return (f"Ошибка: поле '{field_name}' не заполнено. Пожалуйста, заполните это поле.")
         else:
-            return("Произошла ошибка целостности данных:", e)
+            return("Произошла ошибка целостности данных:", e), 404
 
     return jsonify(order.to_dict()), 200
 
