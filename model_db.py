@@ -42,6 +42,13 @@ class Offer(db.Model):
     # order = relationship("Order")
     # give_order = relationship("User")
 
+    def to_dict(self):
+        return {
+            "id": self.id,
+            "order_id": self.order_id,
+            "executor_id": self.executor_id
+        }
+
 
 class Order(db.Model):
     __tablename__ = "order"
@@ -49,8 +56,8 @@ class Order(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(100), nullable=False)
     description = db.Column(db.String(255), nullable=False)
-    start_date = db.Column(db.Date, nullable=False)
-    end_date = db.Column(db.Date, nullable=False)
+    start_date = db.Column(db.Date)
+    end_date = db.Column(db.Date)
     address = db.Column(db.String(255), nullable=False)
     price = db.Column(db.Integer)
     customer_id = db.Column(db.Integer, db.ForeignKey("user.id"))
@@ -61,3 +68,15 @@ class Order(db.Model):
     # user_executor = relationship("User", foreign_keys=[executor_id], back_populates='give_order')
     # offers = relationship("Offer")
 
+    def to_dict(self):
+        return {
+            "id": self.id,
+            "name": self.name,
+            "description": self.description,
+            "start_date": self.start_date,
+            "end_date": self.end_date,
+            "address": self.address,
+            "price": self.price,
+            "customer_id": self.customer_id,
+            "executor_id": self.executor_id
+        }
