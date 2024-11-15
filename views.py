@@ -7,7 +7,6 @@ from sqlalchemy.exc import IntegrityError
 
 from flask import Blueprint, jsonify, request
 
-from data import offers
 from model_db import *
 
 # Создаем Blueprint для маршрутов пользователей

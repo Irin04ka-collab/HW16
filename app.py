@@ -1,4 +1,5 @@
 from flask import Flask
+from flask_sqlalchemy import SQLAlchemy
 from model_db import db
 from db_init import init_db
 from views import user_blueprint
@@ -10,8 +11,10 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['JSON_AS_ASCII'] = False
 app.url_map.strict_slashes = False
 
+
 # Инициализируем базу данных и добавляем Blueprint
-init_db(app)
+
+db.init_app(app)
 app.register_blueprint(user_blueprint)
 
 if __name__ == "__main__":
