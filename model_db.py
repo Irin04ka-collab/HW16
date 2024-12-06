@@ -17,18 +17,6 @@ class User(db.Model):
     phone = db.Column(db.String(40), nullable=False)
     role_id = db.Column(db.Integer)
 
-    def to_dict(self):
-        return {
-            "id": self.id,
-            "first_name": self.first_name,
-            "last_name": self.last_name,
-            "age": self.age,
-            "email": self.email,
-            "role": self.role,
-            "phone": self.phone
-            # "role_id": self.role_id
-        }
-
     # get_order = relationship("Order", foreign_keys=[Order.costumer_id])
     # offers = relationship("Offer")
 
@@ -43,12 +31,6 @@ class Offer(db.Model):
     # order = relationship("Order")
     # give_order = relationship("User")
 
-    def to_dict(self):
-        return {
-            "id": self.id,
-            "order_id": self.order_id,
-            "executor_id": self.executor_id
-        }
 
 
 class Order(db.Model):
@@ -69,15 +51,3 @@ class Order(db.Model):
     # user_executor = relationship("User", foreign_keys=[executor_id], back_populates='give_order')
     # offers = relationship("Offer")
 
-    def to_dict(self):
-        return {
-            "id": self.id,
-            "name": self.name,
-            "description": self.description,
-            "start_date": self.start_date,
-            "end_date": self.end_date,
-            "address": self.address,
-            "price": self.price,
-            "customer_id": self.customer_id,
-            "executor_id": self.executor_id
-        }
